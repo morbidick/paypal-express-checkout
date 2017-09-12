@@ -100,7 +100,7 @@
             // Make a call to the REST api to execute the payment
             return actions.payment.execute().then(function() {
               /**
-               * @event paypal-success Fired on succesful checkout..
+               * @event paypal-success Fired on succesful checkout.
                */
               this.dispatchEvent(new CustomEvent('paypal-success', {
                 bubbles: this.bubbles,
