@@ -15,6 +15,7 @@
     /**
      * @customElement
      * @polymer
+     * @extends {Polymer.Element}
      */
     class PaypalButton extends Polymer.Element {
       static get is() { return 'paypal-button'; }
@@ -47,6 +48,11 @@
           // payment reference (optional)
           reference: {
             type: String,
+          },
+          // whether events bubble
+          bubbles: {
+            type: Boolean,
+            value: false,
           },
         };
       }
@@ -93,7 +99,13 @@
 
             // Make a call to the REST api to execute the payment
             return actions.payment.execute().then(function() {
-              window.alert('Payment Complete!');
+              /**
+               * @event paypal-success Fired on succesful checkout..
+               */
+              this.dispatchEvent(new CustomEvent('paypal-success', {
+                bubbles: this.bubbles,
+                composed: true,
+              }));
             });
           }
 
