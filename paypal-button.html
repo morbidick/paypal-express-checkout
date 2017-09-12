@@ -75,8 +75,6 @@
 
           // payment() is called when the button is clicked
           payment: (data, actions) => {
-            console.log("computing things", "amount", this.amount);
-
             // Make a call to the REST api to create the payment
             return actions.payment.create({
               payment: {
