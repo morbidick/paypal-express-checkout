@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>paypal-button demo</title>
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>window.customElements.forcePolyfill = true; window.ShadyDOM = {force: true};</script>
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../paypal-button.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>paypal-button demo</h3>
+      <demo-snippet>
+        <template>
+          <paypal-button
+            sandbox
+            sandbox-id="AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R"
+            amount="1.00"
+          ></paypal-button>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

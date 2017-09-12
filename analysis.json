@@ -1,0 +1,302 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "",
+      "summary": "",
+      "path": "paypal-button.html",
+      "properties": [
+        {
+          "name": "sandbox",
+          "type": "boolean",
+          "description": "whether to use sandbox mode",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 25,
+              "column": 10
+            },
+            "end": {
+              "line": 29,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "sandboxId",
+          "type": "string",
+          "description": "sandbox client id (https://developer.paypal.com/developer/applications/create)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 31,
+              "column": 10
+            },
+            "end": {
+              "line": 33,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "prdouctionId",
+          "type": "string",
+          "description": "production client id",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 35,
+              "column": 10
+            },
+            "end": {
+              "line": 37,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "amount to charge",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 39,
+              "column": 10
+            },
+            "end": {
+              "line": 41,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "description": "amount currency",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 10
+            },
+            "end": {
+              "line": 46,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"EUR\""
+        },
+        {
+          "name": "reference",
+          "type": "string",
+          "description": "payment reference (optional)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 48,
+              "column": 10
+            },
+            "end": {
+              "line": 50,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 54,
+              "column": 6
+            },
+            "end": {
+              "line": 58,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_renderButton",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 60,
+              "column": 6
+            },
+            "end": {
+              "line": 103,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_env",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 105,
+              "column": 6
+            },
+            "end": {
+              "line": 107,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 19,
+          "column": 4
+        },
+        "end": {
+          "line": 108,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "PaypalButton",
+      "attributes": [
+        {
+          "name": "sandbox",
+          "description": "whether to use sandbox mode",
+          "sourceRange": {
+            "start": {
+              "line": 25,
+              "column": 10
+            },
+            "end": {
+              "line": 29,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "sandbox-id",
+          "description": "sandbox client id (https://developer.paypal.com/developer/applications/create)",
+          "sourceRange": {
+            "start": {
+              "line": 31,
+              "column": 10
+            },
+            "end": {
+              "line": 33,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "prdouction-id",
+          "description": "production client id",
+          "sourceRange": {
+            "start": {
+              "line": 35,
+              "column": 10
+            },
+            "end": {
+              "line": 37,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "description": "amount to charge",
+          "sourceRange": {
+            "start": {
+              "line": 39,
+              "column": 10
+            },
+            "end": {
+              "line": 41,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "currency",
+          "description": "amount currency",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 10
+            },
+            "end": {
+              "line": 46,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "reference",
+          "description": "payment reference (optional)",
+          "sourceRange": {
+            "start": {
+              "line": 48,
+              "column": 10
+            },
+            "end": {
+              "line": 50,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "paypal-button"
+    }
+  ]
+}

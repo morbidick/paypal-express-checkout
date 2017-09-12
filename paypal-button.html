@@ -1,0 +1,113 @@
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="paypal-button">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div id="container"></div>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PaypalButton extends Polymer.Element {
+      static get is() { return 'paypal-button'; }
+
+      static get properties() {
+        return {
+          // whether to use sandbox mode
+          sandbox: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: false,
+          },
+          // sandbox client id (https://developer.paypal.com/developer/applications/create)
+          sandboxId: {
+            type: String,
+          },
+          // production client id
+          prdouctionId: {
+            type: String,
+          },
+          // amount to charge
+          amount: {
+            type: Number,
+          },
+          // amount currency
+          currency: {
+            type: String,
+            value: 'EUR',
+          },
+          // payment reference (optional)
+          reference: {
+            type: String,
+          },
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this._renderButton();
+      }
+
+      _renderButton() {
+        paypal.Button.render({
+
+          env: this._env(),
+
+          // PayPal Client IDs - replace with your own
+          // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+          client: {
+            sandbox:    this.sandboxId,
+            production: this.prdouctionId,
+          },
+
+          // Show the buyer a 'Pay Now' button in the checkout flow
+          commit: true,
+
+          // payment() is called when the button is clicked
+          payment: (data, actions) => {
+            console.log("computing things", "amount", this.amount);
+
+            // Make a call to the REST api to create the payment
+            return actions.payment.create({
+              payment: {
+                transactions: [
+                  {
+                    amount: { total: this.amount, currency: this.currency },
+                    reference_id: this.reference,
+                    notify_url: '',
+                  }
+                ]
+              }
+            });
+          },
+
+          // onAuthorize() is called when the buyer approves the payment
+          onAuthorize: function(data, actions) {
+
+            // Make a call to the REST api to execute the payment
+            return actions.payment.execute().then(function() {
+              window.alert('Payment Complete!');
+            });
+          }
+
+        }, this.$.container);
+      }
+
+      _env() {
+        return this.sandbox ? 'sandbox' : 'production';
+      }
+    }
+
+    customElements.define(PaypalButton.is, PaypalButton);
+  </script>
+</dom-module>

@@ -1,0 +1,24 @@
+{
+  "name": "paypal-express-checkout",
+  "description": "Polymer 2 wrapper for the Paypal Express Checkout button",
+  "author": "morbidick",
+  "license": "MIT",
+  "main": "paypal-button.html",
+  "dependencies": {
+    "bower": "^1.8.0",
+    "polymer-cli": "^1.0.0"
+  },
+  "scripts": {
+    "start": "npm run serve",
+    "init": "polymer init",
+    "serve": "polymer serve",
+    "build": "polymer build",
+    "analyze": "polymer analyze > analysis.json",
+    "lint": "polymer lint",
+    "test": "polymer test",
+    "postinstall": "bower install",
+    "wcinstall": "bower install --save",
+    "wcupdate": "bower update"
+  },
+  "devDependencies": {}
+}
