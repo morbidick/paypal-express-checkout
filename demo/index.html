@@ -7,7 +7,11 @@
     <title>paypal-button demo</title>
 
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    <script>window.customElements.forcePolyfill = true; window.ShadyDOM = {force: true};</script>
+    <script>
+      window.customElements = window.customElements || {};
+      window.customElements.forcePolyfill = true;
+      window.ShadyDOM = {force: true};
+    </script>
     <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
@@ -26,7 +30,7 @@
         <template>
           <paypal-button
             sandbox
-            sandbox-id="AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R"
+            sandbox-id="my-id"
             amount="1.00"
           ></paypal-button>
         </template>

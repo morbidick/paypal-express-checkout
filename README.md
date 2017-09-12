@@ -15,7 +15,11 @@ The by paypal provided script
 
 ````html
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-<script>window.customElements.forcePolyfill = true; window.ShadyDOM = {force: true};</script>
+<script>
+  window.customElements = window.customElements || {};
+  window.customElements.forcePolyfill = true;
+  window.ShadyDOM = {force: true};
+</script>
 <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 ````
 
