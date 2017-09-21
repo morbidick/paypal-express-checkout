@@ -54,6 +54,11 @@
             type: Boolean,
             value: false,
           },
+          response: {
+            type: Object,
+            notify: true,
+            readonly: true,
+          },
         };
       }
 
@@ -95,19 +100,33 @@
           },
 
           // onAuthorize() is called when the buyer approves the payment
-          onAuthorize: function(data, actions) {
+          onAuthorize: (data, actions) => {
 
             // Make a call to the REST api to execute the payment
-            return actions.payment.execute().then(function() {
+            return actions.payment.execute().then( () => {
+              this.response = data;
+
               /**
                * @event paypal-success Fired on succesful checkout.
                */
               this.dispatchEvent(new CustomEvent('paypal-success', {
+                detail: data,
                 bubbles: this.bubbles,
                 composed: true,
               }));
             });
-          }
+          },
+
+          onError: (error) => {
+            /**
+             * @event paypal-error Fired on succesful checkout.
+             */
+            this.dispatchEvent(new CustomEvent('paypal-error', {
+              detail: error,
+              bubbles: this.bubbles,
+              composed: true,
+            }));
+          },
 
         }, this.$.container);
       }
