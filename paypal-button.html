@@ -62,10 +62,10 @@
         };
       }
 
-      ready() {
-        super.ready();
-
-        this._renderButton();
+      static get observers() {
+        return [
+          '_renderButton(sandboxId, productionId)',
+        ];
       }
 
       _renderButton() {
