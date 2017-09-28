@@ -11,6 +11,8 @@ The by paypal provided script
   1. doesnt work with native ShadowDOM, so you need to force the ShadyDOM polyfill
   2. needs to be loaded outside of ShadyDOM
 
+The [open paypal issue](https://github.com/paypal/paypal-checkout/issues/353) for reference.
+
 ### Your resulting `index.html`
 
 ````html
