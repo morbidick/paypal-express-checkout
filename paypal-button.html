@@ -59,24 +59,32 @@
             notify: true,
             readonly: true,
           },
+          paypalScript: {
+            type: String,
+            value: 'https://www.paypalobjects.com/api/checkout.js',
+          },
         };
       }
 
       static get observers() {
         return [
-          '_loadScript(sandboxId, productionId)',
+          '_ensureScript(sandboxId, productionId)',
         ];
       }
 
-      _loadScript() {
-        let ps = document.createElement('script');
-        ps.type = 'text/javascript';
-        ps.src = 'https://www.paypalobjects.com/api/checkout.js';
-        ps.onload = () => {
+      _ensureScript() {
+        if (!window.paypal) {
+          let ps = document.createElement('script');
+          ps.type = 'text/javascript';
+          ps.src = this.paypalScript;
+          ps.onload = () => {
+            this._renderButton();
+          }
+          let doc = document.getElementsByTagName('script')[0];
+          doc.parentNode.insertBefore(ps, doc);
+        } else {
           this._renderButton();
         }
-        let doc = document.getElementsByTagName('script')[0];
-        doc.parentNode.insertBefore(ps, doc);
       }
 
       _renderButton() {
