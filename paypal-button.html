@@ -64,8 +64,19 @@
 
       static get observers() {
         return [
-          '_renderButton(sandboxId, productionId)',
+          '_loadScript(sandboxId, productionId)',
         ];
+      }
+
+      _loadScript() {
+        let ps = document.createElement('script');
+        ps.type = 'text/javascript';
+        ps.src = 'https://www.paypalobjects.com/api/checkout.js';
+        ps.onload = () => {
+          this._renderButton();
+        }
+        let doc = document.getElementsByTagName('script')[0];
+        doc.parentNode.insertBefore(ps, doc);
       }
 
       _renderButton() {

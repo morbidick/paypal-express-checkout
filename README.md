@@ -16,7 +16,6 @@ The [open paypal issue](https://github.com/paypal/paypal-checkout/issues/353) fo
 ### Your resulting `index.html`
 
 ````html
-<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 <script>
   window.customElements = window.customElements || {};
   window.customElements.forcePolyfill = true;
