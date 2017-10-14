@@ -57,7 +57,7 @@
     onAuthorize: (data, actions) => {
       // Make a call to the REST api to execute the payment
       return actions.payment.execute().then( () => {
-        sendMessage("paypal-window-success");
+        sendMessage("paypal-window-success", data);
         window.close();
       });
     },

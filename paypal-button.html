@@ -79,6 +79,8 @@
             this._updatePaypalData();
             break;
           case "paypal-window-success":
+            this.response = event.data.data;
+
             /**
              * @event paypal-success Fired on succesful checkout.
              */
