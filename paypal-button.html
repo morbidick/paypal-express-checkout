@@ -114,6 +114,17 @@
               composed: true,
             }));
             break;
+          case "paypal-window-close":
+            window.removeEventListener("message", this._handler);
+            /**
+             * @event paypal-error Fired on succesful checkout.
+             */
+            this.dispatchEvent(new CustomEvent('paypal-error', {
+              detail: "user closed window",
+              bubbles: this.bubbles,
+              composed: true,
+            }));
+            break;
           default:
             // do nothing
         }
