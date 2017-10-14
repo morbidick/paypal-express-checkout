@@ -2,11 +2,19 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/morbidick/paypal-express-checkout)
 
-Polymer 2 paypal button. Please use with caution, there are multiple restrictions with the paypal library!
-
 ## Restrictions
 
 To work around [paypals issue with ShadowDOM](https://github.com/paypal/paypal-checkout/issues/353) this element opens the paypal button in a new window. This takes a little bit of the "express" out of the checkout since the user has to click two times.
+
+### Polymer build
+
+To build include the paypal.html in your `polymer.json`.
+
+```json
+"extraDependencies": [
+  "bower_components/paypal-express-checkout/paypal.html"
+]
+```
 
 ## Components
 
