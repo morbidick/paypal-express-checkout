@@ -70,6 +70,10 @@
         };
       }
 
+      open() {
+        this._openWindow();
+      }
+
       detachedCallback() {
         window.removeEventListener("message", this._handler);
       }
