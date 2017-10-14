@@ -74,7 +74,7 @@
         this._openWindow();
       }
 
-      detachedCallback() {
+      disconnectedCallback() {
         window.removeEventListener("message", this._handler);
       }
 
