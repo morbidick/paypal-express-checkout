@@ -4,25 +4,9 @@
 
 Polymer 2 paypal button. Please use with caution, there are multiple restrictions with the paypal library!
 
-## :fire: Restrictions :fire:
+## Restrictions
 
-The by paypal provided script
-
-  1. doesnt work with native ShadowDOM, so you need to force the ShadyDOM polyfill
-  2. needs to be loaded outside of ShadyDOM
-
-The [open paypal issue](https://github.com/paypal/paypal-checkout/issues/353) for reference.
-
-### Your resulting `index.html`
-
-````html
-<script>
-  window.customElements = window.customElements || {};
-  window.customElements.forcePolyfill = true;
-  window.ShadyDOM = {force: true};
-</script>
-<script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-````
+To work around [paypals issue with ShadowDOM](https://github.com/paypal/paypal-checkout/issues/353) this element opens the paypal button in a new window. This takes a little bit of the "express" out of the checkout since the user has to click two times.
 
 ## Components
 
@@ -33,6 +17,7 @@ The [open paypal issue](https://github.com/paypal/paypal-checkout/issues/353) fo
   sandbox
   sandbox-id="my-id"
   amount="1.00"
+  reference="your-payment-reference"
 ></paypal-button>
 ````
 

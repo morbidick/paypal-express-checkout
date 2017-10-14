@@ -7,7 +7,9 @@
         display: block;
       }
     </style>
-    <div id="container"></div>
+
+    <a href="#" on-click="_openWindow"><slot>Paypal</slot></a>
+
     </template>
   </template>
 
@@ -59,95 +61,57 @@
             notify: true,
             readonly: true,
           },
-          paypalScript: {
-            type: String,
-            value: 'https://www.paypalobjects.com/api/checkout.js',
+          _window: {
+            type: Object,
           },
         };
       }
 
-      static get observers() {
-        return [
-          '_ensureScript(sandboxId, productionId)',
-        ];
+      _openWindow() {
+        window.addEventListener("message", this._eventHandler.bind(this));
+        this._window = window.open(`${this.resolveUrl("paypal.html")}?env=${this._env()}&sandboxId=${this.sandboxId}&productionId=${this.productionId}`);
       }
 
-      _ensureScript() {
-        if (!window.paypal) {
-          let ps = document.createElement('script');
-          ps.type = 'text/javascript';
-          ps.src = this.paypalScript;
-          ps.onload = () => {
-            this._renderButton();
-          }
-          let doc = document.getElementsByTagName('script')[0];
-          doc.parentNode.insertBefore(ps, doc);
-        } else {
-          this._renderButton();
-        }
-      }
-
-      _renderButton() {
-        paypal.Button.render({
-
-          env: this._env(),
-
-          // PayPal Client IDs - replace with your own
-          // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-          client: {
-            sandbox:    this.sandboxId,
-            production: this.prdouctionId,
-          },
-
-          // Show the buyer a 'Pay Now' button in the checkout flow
-          commit: true,
-
-          // payment() is called when the button is clicked
-          payment: (data, actions) => {
-            // Make a call to the REST api to create the payment
-            return actions.payment.create({
-              payment: {
-                transactions: [
-                  {
-                    amount: { total: this.amount, currency: this.currency },
-                    custom: this.reference,
-                    notify_url: '',
-                  }
-                ]
-              }
-            });
-          },
-
-          // onAuthorize() is called when the buyer approves the payment
-          onAuthorize: (data, actions) => {
-
-            // Make a call to the REST api to execute the payment
-            return actions.payment.execute().then( () => {
-              this.response = data;
-
-              /**
-               * @event paypal-success Fired on succesful checkout.
-               */
-              this.dispatchEvent(new CustomEvent('paypal-success', {
-                detail: data,
-                bubbles: this.bubbles,
-                composed: true,
-              }));
-            });
-          },
-
-          onError: (error) => {
+      // data bridge recieving
+      _eventHandler(event) {
+        switch(event.data.type) {
+          case "paypal-window-rendered":
+            this._updatePaypalData();
+            break;
+          case "paypal-window-success":
+            /**
+             * @event paypal-success Fired on succesful checkout.
+             */
+            this.dispatchEvent(new CustomEvent('paypal-success', {
+              detail: event.data.data,
+              bubbles: this.bubbles,
+              composed: true,
+            }));
+            break;
+          case "paypal-window-error":
             /**
              * @event paypal-error Fired on succesful checkout.
              */
             this.dispatchEvent(new CustomEvent('paypal-error', {
-              detail: error,
+              detail: event.data.data,
               bubbles: this.bubbles,
               composed: true,
             }));
-          },
+            break;
+          default:
+            // do nothing
+        }
+      }
 
-        }, this.$.container);
+      _updatePaypalData() {
+        this._window.postMessage({
+          type: "paypal-window-data",
+          payment: {
+            amount: this.amount,
+            currency: this.currency,
+            reference: this.reference,
+          }
+        }, "*");
       }
 
       _env() {

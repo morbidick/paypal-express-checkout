@@ -1,0 +1,90 @@
+<head>
+  <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+  <script>
+  var searchParams = new URLSearchParams(window.location.search)
+
+  var settings = {};
+
+  function sendMessage(type, data) {
+    window.opener.postMessage({
+      type,
+      data
+    }, "*");
+  }
+
+  // data bridge recieving
+  window.addEventListener("message", (event) => {
+    if (event.data.type == "paypal-window-data") {
+      settings = event.data.payment;
+    }
+  });
+
+  var button = paypal.Button.render({
+
+    env: searchParams.get("env"),
+
+    // PayPal Client IDs - replace with your own
+    // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+    client: {
+      sandbox:    searchParams.get("sandboxId"),
+      production: searchParams.get("productionId"),
+    },
+
+    // Show the buyer a 'Pay Now' button in the checkout flow
+    commit: true,
+
+    onDisplay: function(data) {
+      sendMessage("paypal-window-rendered");
+    },
+
+    // payment() is called when the button is clicked
+    payment: (data, actions) => {
+      // Make a call to the REST api to create the payment
+      return actions.payment.create({
+        payment: {
+          transactions: [
+            {
+              amount: { total: settings.amount, currency: settings.currency },
+              custom: settings.reference,
+              notify_url: '',
+            }
+          ]
+        }
+      });
+    },
+
+    // onAuthorize() is called when the buyer approves the payment
+    onAuthorize: (data, actions) => {
+      // Make a call to the REST api to execute the payment
+      return actions.payment.execute().then( () => {
+        sendMessage("paypal-window-success");
+        window.close();
+      });
+    },
+
+    onError: (error) => {
+      sendMessage("paypal-window-error", error);
+      window.close();
+    },
+
+  }, "#container");
+
+  </script>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .centered {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="centered">
+    <h1>Paypal express checkout</h1>
+    <div id="container"></div>
+  </div>
+</body>
