@@ -12,10 +12,19 @@
     }, "*");
   }
 
+  function successMessageFailed() {
+    // TODO redirect to referer with paypal data
+  }
+
   // data bridge recieving
   window.addEventListener("message", (event) => {
-    if (event.data.type == "paypal-window-data") {
-      settings = event.data.payment;
+    switch (event.data.type) {
+      case "paypal-window-success-ack":
+        // TODO remove listener
+        window.close();
+        break;
+      default:
+        // do nothing
     }
   });
 
@@ -44,9 +53,10 @@
         payment: {
           transactions: [
             {
-              amount: { total: settings.amount, currency: settings.currency },
-              custom: settings.reference,
+              amount: { total: searchParams.get("amount"), currency: searchParams.get("currency") },
+              custom: searchParams.get("reference"),
               notify_url: '',
+              // TODO set redirect URI
             }
           ]
         }
@@ -58,7 +68,7 @@
       // Make a call to the REST api to execute the payment
       return actions.payment.execute().then( () => {
         sendMessage("paypal-window-success", data);
-        window.close();
+        // TODO set Timeout to redirect
       });
     },
 

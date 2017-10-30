@@ -81,16 +81,34 @@
       _openWindow() {
         this._handler = this._eventHandler.bind(this);
         window.addEventListener("message", this._handler);
-        this._window = window.open(`${this.resolveUrl("paypal.html")}?env=${this._env()}&sandboxId=${this.sandboxId}&productionId=${this.productionId}`);
+
+        let params = new URLSearchParams();
+        params.set('env', this._env());
+        params.set('sandboxId', this.sandboxId);
+        params.set('productionId', this.productionId);
+        params.set('amount', this.amount);
+        params.set('currency', this.currency);
+        params.set('reference', this.reference);
+        params.set('referer', document.location.href);
+
+        this._window = window.open(`${this.resolveUrl("paypal.html")}?${params.toString()}`);
+      }
+
+      _sendMessage(type, data) {
+        this._window.postMessage({
+          type,
+          data
+        }, "*");
       }
 
       // data bridge recieving
       _eventHandler(event) {
         switch(event.data.type) {
           case "paypal-window-rendered":
-            this._updatePaypalData();
             break;
           case "paypal-window-success":
+            this._sendMessage("paypal-window-success-ack");
+
             window.removeEventListener("message", this._handler);
             this.response = event.data.data;
 
@@ -125,17 +143,6 @@
           default:
             // do nothing
         }
-      }
-
-      _updatePaypalData() {
-        this._window.postMessage({
-          type: "paypal-window-data",
-          payment: {
-            amount: this.amount,
-            currency: this.currency,
-            reference: this.reference,
-          }
-        }, "*");
       }
 
       _env() {
