@@ -74,6 +74,24 @@
         this._openWindow();
       }
 
+      connectedCallback() {
+        super.connectedCallback();
+
+        let searchParams = new URLSearchParams(window.location.search);
+
+        if (searchParams.has("paypal-window-success")) {
+          this._fireSuccess({
+            // map the callback url params to the api response
+            paymentID: searchParams.get("paymentId"),
+            paymentToken: searchParams.get("token"),
+            payerID: searchParams.get("PayerID"),
+          });
+        }
+        if (searchParams.has("paypal-window-error")) {
+          this._fireError();
+        }
+      }
+
       disconnectedCallback() {
         window.removeEventListener("message", this._handler);
       }
@@ -103,6 +121,28 @@
         }, "*");
       }
 
+      _fireSuccess(data) {
+        /**
+         * @event paypal-success Fired on succesful checkout.
+         */
+        this.dispatchEvent(new CustomEvent('paypal-success', {
+          detail: data,
+          bubbles: this.bubbles,
+          composed: true,
+        }));
+      }
+
+      _fireError(data) {
+        /**
+         * @event paypal-error Fired on paypal error or window close.
+         */
+        this.dispatchEvent(new CustomEvent('paypal-error', {
+          detail: data,
+          bubbles: this.bubbles,
+          composed: true,
+        }));
+      }
+
       // data bridge recieving
       _eventHandler(event) {
         switch(event.data.type) {
@@ -110,37 +150,18 @@
             break;
           case "paypal-window-success":
             this._sendMessage("paypal-window-success-ack");
-
             window.removeEventListener("message", this._handler);
-            this.response = event.data.data;
 
-            /**
-             * @event paypal-success Fired on succesful checkout.
-             */
-            this.dispatchEvent(new CustomEvent('paypal-success', {
-              detail: event.data.data,
-              bubbles: this.bubbles,
-              composed: true,
-            }));
+            this.response = event.data.data;
+            this._fireSuccess(event.data.data);
             break;
           case "paypal-window-error":
             window.removeEventListener("message", this._handler);
-            /**
-             * @event paypal-error Fired on paypal error or window close.
-             */
-            this.dispatchEvent(new CustomEvent('paypal-error', {
-              detail: event.data.data,
-              bubbles: this.bubbles,
-              composed: true,
-            }));
+            this._fireError(event.data.data);
             break;
           case "paypal-window-close":
             window.removeEventListener("message", this._handler);
-            this.dispatchEvent(new CustomEvent('paypal-error', {
-              detail: "user closed window",
-              bubbles: this.bubbles,
-              composed: true,
-            }));
+            this._fireError("user closed window");
             break;
           default:
             // do nothing

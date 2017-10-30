@@ -26,7 +26,13 @@
             sandbox
             sandbox-id="AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R"
             amount="33.00"
+            bubbles
           ></paypal-button>
+          <script>
+            document.body.addEventListener("paypal-success", function(event) {
+              alert(JSON.stringify(event.detail));
+            });
+          </script>
         </template>
       </demo-snippet>
     </div>

@@ -1,9 +1,8 @@
 <head>
   <script src="https://www.paypalobjects.com/api/checkout.js"></script>
   <script>
-  var searchParams = new URLSearchParams(window.location.search)
-
-  var settings = {};
+  var searchParams = new URLSearchParams(window.location.search);
+  var bridgeTimeoutHandler;
 
   function sendMessage(type, data) {
     window.opener.postMessage({
@@ -12,15 +11,23 @@
     }, "*");
   }
 
-  function successMessageFailed() {
-    // TODO redirect to referer with paypal data
+  // helper to append params to an url
+  function appendUrlParam(url, paramString) {
+    var url = url || '';
+
+    if (paramString) {
+      var bindingChar = url.indexOf('?') >= 0 ? '&' : '?';
+      return url + bindingChar + paramString;
+    }
+
+    return url;
   }
 
   // data bridge recieving
   window.addEventListener("message", (event) => {
     switch (event.data.type) {
       case "paypal-window-success-ack":
-        // TODO remove listener
+        window.clearTimeout(bridgeTimeoutHandler);
         window.close();
         break;
       default:
@@ -55,11 +62,13 @@
             {
               amount: { total: searchParams.get("amount"), currency: searchParams.get("currency") },
               custom: searchParams.get("reference"),
-              notify_url: '',
-              // TODO set redirect URI
-            }
-          ]
-        }
+            },
+          ],
+          redirect_urls: {
+            return_url: appendUrlParam(searchParams.get("referer"), "paypal-window-success"),
+            cancel_url: appendUrlParam(searchParams.get("referer"), "paypal-window-close"),
+          },
+        },
       });
     },
 
@@ -67,8 +76,19 @@
     onAuthorize: (data, actions) => {
       // Make a call to the REST api to execute the payment
       return actions.payment.execute().then( () => {
+        // detect dead bridge and redirect
+        bridgeTimeoutHandler = window.setTimeout(function() {
+          let paypalData = new URLSearchParams();
+          // mapping according to how paypal is handling the return_url
+          paypalData.set("paymentId", data.paymentID);
+          paypalData.set("token", data.paymentToken);
+          paypalData.set("PayerID", data.payerID);
+
+          document.location = appendUrlParam(searchParams.get("referer"), `paypal-window-success&${paypalData.toString()}`);
+        }, 1000);
+
+        // send success via bridge
         sendMessage("paypal-window-success", data);
-        // TODO set Timeout to redirect
       });
     },
 
