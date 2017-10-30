@@ -78,7 +78,9 @@
         window.removeEventListener("message", this._handler);
       }
 
-      _openWindow() {
+      _openWindow(event) {
+        event.preventDefault();
+
         this._handler = this._eventHandler.bind(this);
         window.addEventListener("message", this._handler);
 
