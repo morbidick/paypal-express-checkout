@@ -5,10 +5,12 @@
   var bridgeTimeoutHandler;
 
   function sendMessage(type, data) {
-    window.opener.postMessage({
-      type,
-      data
-    }, "*");
+    if (window.opener) {
+      window.opener.postMessage({
+        type,
+        data
+      }, "*");
+    }
   }
 
   // helper to append params to an url
@@ -28,6 +30,12 @@
     switch (event.data.type) {
       case "paypal-window-success-ack":
         window.clearTimeout(bridgeTimeoutHandler);
+        window.close();
+        break;
+      case "paypal-window-close-ack":
+        window.close();
+        break;
+      case "paypal-window-error-ack":
         window.close();
         break;
       default:
@@ -94,12 +102,10 @@
 
     onCancel: (data, actions) => {
       sendMessage("paypal-window-close");
-      window.close();
     },
 
     onError: (error) => {
       sendMessage("paypal-window-error", error);
-      window.close();
     },
 
   }, "#container");

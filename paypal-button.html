@@ -115,10 +115,12 @@
       }
 
       _sendMessage(type, data) {
-        this._window.postMessage({
-          type,
-          data
-        }, "*");
+        if (this._window) {
+          this._window.postMessage({
+            type,
+            data
+          }, "*");
+        }
       }
 
       _fireSuccess(data) {
@@ -156,10 +158,12 @@
             this._fireSuccess(event.data.data);
             break;
           case "paypal-window-error":
+            this._sendMessage("paypal-window-error-ack");
             window.removeEventListener("message", this._handler);
             this._fireError(event.data.data);
             break;
           case "paypal-window-close":
+            this._sendMessage("paypal-window-close-ack");
             window.removeEventListener("message", this._handler);
             this._fireError("user closed window");
             break;
