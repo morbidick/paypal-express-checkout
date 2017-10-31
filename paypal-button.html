@@ -71,7 +71,19 @@
       }
 
       open() {
-        this._openWindow();
+        this._handler = this._eventHandler.bind(this);
+        window.addEventListener("message", this._handler);
+
+        let params = new URLSearchParams();
+        params.set('env', this._env());
+        params.set('sandboxId', this.sandboxId);
+        params.set('productionId', this.productionId);
+        params.set('amount', this.amount);
+        params.set('currency', this.currency);
+        params.set('reference', this.reference);
+        params.set('referer', document.location.href);
+
+        this._window = window.open(`${this.resolveUrl("paypal.html")}?${params.toString()}`);
       }
 
       connectedCallback() {
@@ -98,20 +110,7 @@
 
       _openWindow(event) {
         event.preventDefault();
-
-        this._handler = this._eventHandler.bind(this);
-        window.addEventListener("message", this._handler);
-
-        let params = new URLSearchParams();
-        params.set('env', this._env());
-        params.set('sandboxId', this.sandboxId);
-        params.set('productionId', this.productionId);
-        params.set('amount', this.amount);
-        params.set('currency', this.currency);
-        params.set('reference', this.reference);
-        params.set('referer', document.location.href);
-
-        this._window = window.open(`${this.resolveUrl("paypal.html")}?${params.toString()}`);
+        this.open();
       }
 
       _sendMessage(type, data) {
