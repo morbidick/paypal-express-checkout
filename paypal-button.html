@@ -88,24 +88,33 @@
 
       connectedCallback() {
         super.connectedCallback();
+        this.handleParams();
+      }
 
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener("message", this._handler);
+      }
+
+      async handleParams() {
+        // queue as micro task
+        await 0;
         let searchParams = new URLSearchParams(window.location.search);
 
         if (searchParams.has("paypal-window-success")) {
-          this._fireSuccess({
+          let data = {
             // map the callback url params to the api response
             paymentID: searchParams.get("paymentId"),
             paymentToken: searchParams.get("token"),
             payerID: searchParams.get("PayerID"),
-          });
+          };
+
+          this._fireSuccess(data);
+          this.response = data;
         }
         if (searchParams.has("paypal-window-error")) {
           this._fireError();
         }
-      }
-
-      disconnectedCallback() {
-        window.removeEventListener("message", this._handler);
       }
 
       _openWindow(event) {
