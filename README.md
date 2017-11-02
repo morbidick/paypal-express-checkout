@@ -29,6 +29,14 @@ To build include the paypal.html in your `polymer.json`.
 ></paypal-button>
 ````
 
+#### How does it work
+
+  * a click on the component or calling `.open()` opens a new window and renders the button there
+  * All PayPal events get send back via a postMessage bridge and fire the corresponding events on the component
+  * In case the messages dont get acknowledged (for example the user closed the original app tab) the page redirects back to the app and sets url params according to the paypal response
+  * In case the user also closed the button window or paypal cant find the reference (for example in tor browser) the paypal redirect url has been set to the original app url
+  * On render the web component analyses the page params to detect one of the cases above and fires the corresponding events.
+
 ## Development
 
 ```bash

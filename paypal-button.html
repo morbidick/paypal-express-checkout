@@ -56,20 +56,24 @@
             type: Boolean,
             value: false,
           },
+          // the paypal response data
           response: {
             type: Object,
             notify: true,
             readonly: true,
           },
+          // the opened window to render the button
           _window: {
             type: Object,
           },
+          // postMessage listener and handler
           _handler: {
             type: Object,
           }
         };
       }
 
+      // open the window for the paypal button and start payment workflow (requires ids and amount to be set)
       open() {
         this._handler = this._eventHandler.bind(this);
         window.addEventListener("message", this._handler);
@@ -96,6 +100,7 @@
         window.removeEventListener("message", this._handler);
       }
 
+      // detect from url params if the page is a redirect from the payment flow
       async handleParams() {
         // queue as micro task
         await 0;
