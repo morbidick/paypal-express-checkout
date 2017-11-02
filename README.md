@@ -2,6 +2,10 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/morbidick/paypal-express-checkout)
 
+<p align="center">
+  <img src="demo/flow.gif" alt="Button flow demo"/>
+</p>
+
 ## Restrictions
 
 To work around [paypals issue with ShadowDOM](https://github.com/paypal/paypal-checkout/issues/353) this element opens the paypal button in a new window. This takes a little bit of the "express" out of the checkout since the user has [to click two times](https://github.com/paypal/paypal-checkout/issues/287).
