@@ -22,15 +22,15 @@ To build include the paypal.html in your `polymer.json`.
 
 ## Components
 
-### \<paypal-button\>
+### \<paypal-button-express\>
 
 ````html
-<paypal-button
+<paypal-button-express
   sandbox
   sandbox-id="my-id"
   amount="1.00"
   reference="your-payment-reference"
-></paypal-button>
+></paypal-button-express>
 ````
 
 #### How does it work
@@ -40,6 +40,18 @@ To build include the paypal.html in your `polymer.json`.
   * In case the messages dont get acknowledged (for example the user closed the original app tab) the page redirects back to the app and sets url params according to the paypal response
   * In case the user also closed the button window or paypal cant find the reference (for example in tor browser) the paypal redirect url has been set to the original app url
   * On render the web component analyses the page params to detect one of the cases above and fires the corresponding events.
+
+### \<paypal-button-donate\>
+
+using the [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/).
+
+````html
+<paypal-button-donate
+  paypal-id="id@example.org"
+  amount="1.00"
+  reference="your-payment-reference"
+></paypal-button-donate>
+````
 
 ## Development
 

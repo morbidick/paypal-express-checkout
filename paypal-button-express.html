@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
-<dom-module id="paypal-button">
+<dom-module id="paypal-button-express">
   <template>
     <style>
       :host {
@@ -19,8 +19,8 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class PaypalButton extends Polymer.Element {
-      static get is() { return 'paypal-button'; }
+    class PaypalButtonExpress extends Polymer.Element {
+      static get is() { return 'paypal-button-express'; }
 
       static get properties() {
         return {
@@ -190,6 +190,6 @@
       }
     }
 
-    customElements.define(PaypalButton.is, PaypalButton);
+    customElements.define(PaypalButtonExpress.is, PaypalButtonExpress);
   </script>
 </dom-module>

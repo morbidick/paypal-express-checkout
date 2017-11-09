@@ -1,0 +1,133 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="paypal-button-donate">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <form id="form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+
+      <!-- Identify your business so that you can collect the payments. -->
+      <input type="hidden" name="business" value$="[[ paypalId ]]">
+
+      <!-- redirect URL -->
+      <input type="hidden" name="notify_url" value$="[[ notify ]]">
+      <input type="hidden" name="return" value$="[[ referer ]]?paypal-donate-success">
+      <input type="hidden" name="cancel_return" value$="[[ referer ]]?paypal-donate-cancel">
+      <input type="hidden" name="rm" value="0">
+
+      <!-- Specify a Donate button. -->
+      <input type="hidden" name="cmd" value="_donations">
+
+      <!-- Specify details about the contribution -->
+      <input type="hidden" name="item_name" value="Donation">
+      <input type="hidden" name="item_number" value$="[[ reference ]]">
+      <input type="hidden" name="amount" value$="[[ amount ]]">
+      <input type="hidden" name="currency_code" value$="[[ currency ]]">
+      <input type="hidden" name="no_shipping" value="1">
+    </form>
+    <a href="#" on-click="_click">
+      <slot>Donate via PayPal</slot>
+    </a>
+
+    </template>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class PaypalButtonDonate extends Polymer.Element {
+      static get is() { return 'paypal-button-donate'; }
+
+      static get properties() {
+        return {
+          paypalId: {
+            type: String,
+          },
+          // amount to charge
+          amount: {
+            type: Number,
+          },
+          // amount currency
+          currency: {
+            type: String,
+            value: 'EUR',
+          },
+          // payment reference (optional)
+          reference: {
+            type: String,
+          },
+          // whether events bubble
+          bubbles: {
+            type: Boolean,
+            value: false,
+          },
+          // the url to redirect in the end
+          referer: {
+            type: String,
+            value: () => {
+              return document.location.href;
+            },
+          },
+          // the url to send ipn notifications
+          notify: {
+            type: String,
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.handleParams();
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener("message", this._handler);
+      }
+
+      _click(event) {
+        event.preventDefault();
+        this.open();
+      }
+
+      open() {
+        this.$.form.submit();
+      }
+
+      // detect from url params if the page is a redirect from the payment flow
+      async handleParams() {
+        // queue as micro task
+        await 0;
+        let searchParams = new URLSearchParams(window.location.search);
+
+        if (searchParams.has("paypal-donate-success")) {
+          /**
+          * @event paypal-success Fired on succesful checkout.
+          */
+          this.dispatchEvent(new CustomEvent('paypal-success', {
+            bubbles: this.bubbles,
+            composed: true,
+          }));
+        }
+        if (searchParams.has("paypal-donate-error")) {
+          /**
+          * @event paypal-error Fired on paypal error or window close.
+          */
+          this.dispatchEvent(new CustomEvent('paypal-error', {
+            bubbles: this.bubbles,
+            composed: true,
+          }));
+        }
+      }
+    }
+
+    customElements.define(PaypalButtonDonate.is, PaypalButtonDonate);
+  </script>
+</dom-module>
