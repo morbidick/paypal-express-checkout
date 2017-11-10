@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
-<dom-module id="paypal-button-donate">
+<dom-module id="paypal-button-form">
   <template>
     <style>
       :host {
@@ -19,18 +19,18 @@
       <input type="hidden" name="cancel_return" value$="[[ referer ]]?paypal-donate-cancel">
       <input type="hidden" name="rm" value="0">
 
-      <!-- Specify a Donate button. -->
-      <input type="hidden" name="cmd" value="_donations">
+      <!-- Specify Button type. -->
+      <input type="hidden" name="cmd" value$="[[ type ]]">
 
       <!-- Specify details about the contribution -->
-      <input type="hidden" name="item_name" value="Donation">
-      <input type="hidden" name="item_number" value$="[[ reference ]]">
+      <input type="hidden" name="item_name" value$="itemName">
+      <input type="hidden" name="custom" value$="[[ reference ]]">
       <input type="hidden" name="amount" value$="[[ amount ]]">
       <input type="hidden" name="currency_code" value$="[[ currency ]]">
       <input type="hidden" name="no_shipping" value="1">
     </form>
     <a href="#" on-click="_click">
-      <slot>Donate via PayPal</slot>
+      <slot>PayPal</slot>
     </a>
 
     </template>
@@ -42,14 +42,19 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class PaypalButtonDonate extends Polymer.Element {
-      static get is() { return 'paypal-button-donate'; }
+    class PaypalButtonForm extends Polymer.Element {
+      static get is() { return 'paypal-button-form'; }
 
       static get properties() {
         return {
+          // your paypal address
           paypalId: {
             type: String,
           },
+          // the item name in paypal checkout
+          itemName: {
+            type: String,
+          }
           // amount to charge
           amount: {
             type: Number,
@@ -74,6 +79,12 @@
             value: () => {
               return document.location.href;
             },
+          },
+          // the cmd parameter send with the form
+          // see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/#specifying-button-type--cmd
+          type: {
+            type: String,
+            value: "_donations",
           },
           // the url to send ipn notifications
           notify: {
@@ -105,9 +116,9 @@
       async handleParams() {
         // queue as micro task
         await 0;
-        let searchParams = new URLSearchParams(window.location.search);
+        let searchParams = window.location.search;
 
-        if (searchParams.has("paypal-donate-success")) {
+        if (searchParams.indexOf("paypal-donate-success") > 0) {
           /**
           * @event paypal-success Fired on succesful checkout.
           */
@@ -116,7 +127,7 @@
             composed: true,
           }));
         }
-        if (searchParams.has("paypal-donate-error")) {
+        if (searchParams.indexOf("paypal-donate-error") > 0) {
           /**
           * @event paypal-error Fired on paypal error or window close.
           */
@@ -128,6 +139,6 @@
       }
     }
 
-    customElements.define(PaypalButtonDonate.is, PaypalButtonDonate);
+    customElements.define(PaypalButtonForm.is, PaypalButtonForm);
   </script>
 </dom-module>

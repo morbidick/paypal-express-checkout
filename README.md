@@ -46,11 +46,11 @@ To build include the paypal.html in your `polymer.json`.
 using the [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/).
 
 ````html
-<paypal-button-donate
+<paypal-button-form
   paypal-id="id@example.org"
   amount="1.00"
   reference="your-payment-reference"
-></paypal-button-donate>
+></paypal-button-form>
 ````
 
 ## Development
