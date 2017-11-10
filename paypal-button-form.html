@@ -23,7 +23,7 @@
       <input type="hidden" name="cmd" value$="[[ type ]]">
 
       <!-- Specify details about the contribution -->
-      <input type="hidden" name="item_name" value$="itemName">
+      <input type="hidden" name="item_name" value$="[[ itemName ]]">
       <input type="hidden" name="custom" value$="[[ reference ]]">
       <input type="hidden" name="amount" value$="[[ amount ]]">
       <input type="hidden" name="currency_code" value$="[[ currency ]]">
@@ -54,7 +54,7 @@
           // the item name in paypal checkout
           itemName: {
             type: String,
-          }
+          },
           // amount to charge
           amount: {
             type: Number,
