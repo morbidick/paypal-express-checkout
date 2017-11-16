@@ -4,7 +4,7 @@
     {
       "description": "",
       "summary": "",
-      "path": "paypal-button.html",
+      "path": "paypal-button-express.html",
       "properties": [
         {
           "name": "sandbox",
@@ -412,7 +412,7 @@
       },
       "privacy": "public",
       "superclass": "HTMLElement",
-      "name": "PaypalButton",
+      "name": "PaypalButtonExpress",
       "attributes": [
         {
           "name": "sandbox",
@@ -572,7 +572,7 @@
           "description": "",
           "name": "",
           "range": {
-            "file": "paypal-button.html",
+            "file": "paypal-button-express.html",
             "start": {
               "line": 10,
               "column": 39
@@ -584,7 +584,477 @@
           }
         }
       ],
-      "tagname": "paypal-button"
+      "tagname": "paypal-button-express"
+    },
+    {
+      "description": "",
+      "summary": "",
+      "path": "paypal-button-form.html",
+      "properties": [
+        {
+          "name": "paypalId",
+          "type": "string",
+          "description": "your paypal address",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 50,
+              "column": 10
+            },
+            "end": {
+              "line": 52,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "itemName",
+          "type": "string",
+          "description": "the item name in paypal checkout",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 54,
+              "column": 10
+            },
+            "end": {
+              "line": 56,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "amount to charge",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 58,
+              "column": 10
+            },
+            "end": {
+              "line": 60,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "description": "amount currency",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 62,
+              "column": 10
+            },
+            "end": {
+              "line": 65,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"EUR\""
+        },
+        {
+          "name": "reference",
+          "type": "string",
+          "description": "payment reference (optional)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 67,
+              "column": 10
+            },
+            "end": {
+              "line": 69,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "bubbles",
+          "type": "boolean",
+          "description": "whether events bubble",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 10
+            },
+            "end": {
+              "line": 74,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "referer",
+          "type": "string",
+          "description": "the url to redirect in the end",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 76,
+              "column": 10
+            },
+            "end": {
+              "line": 81,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "description": "see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/#specifying-button-type--cmd",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 84,
+              "column": 10
+            },
+            "end": {
+              "line": 87,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"_donations\""
+        },
+        {
+          "name": "notify",
+          "type": "string",
+          "description": "the url to send ipn notifications",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 89,
+              "column": 10
+            },
+            "end": {
+              "line": 91,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 95,
+              "column": 6
+            },
+            "end": {
+              "line": 98,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 100,
+              "column": 6
+            },
+            "end": {
+              "line": 103,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_click",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 105,
+              "column": 6
+            },
+            "end": {
+              "line": 108,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "open",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 110,
+              "column": 6
+            },
+            "end": {
+              "line": 112,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "handleParams",
+          "description": "detect from url params if the page is a redirect from the payment flow",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 115,
+              "column": 6
+            },
+            "end": {
+              "line": 138,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 44,
+          "column": 4
+        },
+        "end": {
+          "line": 139,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "PaypalButtonForm",
+      "attributes": [
+        {
+          "name": "paypal-id",
+          "description": "your paypal address",
+          "sourceRange": {
+            "start": {
+              "line": 50,
+              "column": 10
+            },
+            "end": {
+              "line": 52,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "item-name",
+          "description": "the item name in paypal checkout",
+          "sourceRange": {
+            "start": {
+              "line": 54,
+              "column": 10
+            },
+            "end": {
+              "line": 56,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "description": "amount to charge",
+          "sourceRange": {
+            "start": {
+              "line": 58,
+              "column": 10
+            },
+            "end": {
+              "line": 60,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "currency",
+          "description": "amount currency",
+          "sourceRange": {
+            "start": {
+              "line": 62,
+              "column": 10
+            },
+            "end": {
+              "line": 65,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "reference",
+          "description": "payment reference (optional)",
+          "sourceRange": {
+            "start": {
+              "line": 67,
+              "column": 10
+            },
+            "end": {
+              "line": 69,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "bubbles",
+          "description": "whether events bubble",
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 10
+            },
+            "end": {
+              "line": 74,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "referer",
+          "description": "the url to redirect in the end",
+          "sourceRange": {
+            "start": {
+              "line": 76,
+              "column": 10
+            },
+            "end": {
+              "line": 81,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "description": "see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/#specifying-button-type--cmd",
+          "sourceRange": {
+            "start": {
+              "line": 84,
+              "column": 10
+            },
+            "end": {
+              "line": 87,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "notify",
+          "description": "the url to send ipn notifications",
+          "sourceRange": {
+            "start": {
+              "line": 89,
+              "column": 10
+            },
+            "end": {
+              "line": 91,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "paypal-error",
+          "description": "paypal-error Fired on paypal error or window close.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "paypal-success",
+          "description": "paypal-success Fired on succesful checkout.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [
+        {
+          "description": "",
+          "name": "",
+          "range": {
+            "file": "paypal-button-form.html",
+            "start": {
+              "line": 32,
+              "column": 6
+            },
+            "end": {
+              "line": 32,
+              "column": 25
+            }
+          }
+        }
+      ],
+      "tagname": "paypal-button-form"
     }
   ]
 }

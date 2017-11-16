@@ -41,9 +41,9 @@ To build include the paypal.html in your `polymer.json`.
   * In case the user also closed the button window or paypal cant find the reference (for example in tor browser) the paypal redirect url has been set to the original app url
   * On render the web component analyses the page params to detect one of the cases above and fires the corresponding events.
 
-### \<paypal-button-donate\>
+### \<paypal-button-form\>
 
-using the [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/).
+Using the (older) [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/), an easier checkout can be accomplished,. To get notified about payments you have to set `notify` to an [IPN](https://developer.paypal.com/docs/classic/products/instant-payment-notification/) url on your site.
 
 ````html
 <paypal-button-form
