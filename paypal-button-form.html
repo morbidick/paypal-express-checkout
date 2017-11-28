@@ -8,7 +8,7 @@
       }
     </style>
 
-    <form id="form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <form id="form" action$="[[ _url ]]" method="post">
 
       <!-- Identify your business so that you can collect the payments. -->
       <input type="hidden" name="business" value$="[[ paypalId ]]">
@@ -90,6 +90,15 @@
           notify: {
             type: String,
           },
+          sandbox: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+          },
+          _url: {
+            type: String,
+            computed: "__url(sandbox)",
+          },
         };
       }
 
@@ -110,6 +119,14 @@
 
       open() {
         this.$.form.submit();
+      }
+
+      __url(sandbox) {
+        if (sandbox) {
+          return "https://www.sandbox.paypal.com/cgi-bin/webscr";
+        } else {
+          return "https://www.paypal.com/cgi-bin/webscr";
+        }
       }
 
       // detect from url params if the page is a redirect from the payment flow
