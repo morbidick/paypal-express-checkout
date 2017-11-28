@@ -43,7 +43,7 @@ To build include the paypal.html in your `polymer.json`.
 
 ### \<paypal-button-form\>
 
-Using the (older) [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/), an easier checkout can be accomplished,. To get notified about payments you have to set `notify` to an [IPN](https://developer.paypal.com/docs/classic/products/instant-payment-notification/) url on your site.
+Using the (older) [paypal form api](https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/), an easier checkout can be accomplished. To get notified about payments you have to set `notify` to an [IPN](https://developer.paypal.com/docs/classic/products/instant-payment-notification/) url on your site.
 
 ````html
 <paypal-button-form
