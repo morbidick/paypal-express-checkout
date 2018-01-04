@@ -164,9 +164,9 @@
           }
         },
         {
-          "name": "_window",
+          "name": "_frame",
           "type": "Object",
-          "description": "the opened window to render the button",
+          "description": "the iframe to render the button",
           "privacy": "protected",
           "sourceRange": {
             "start": {
@@ -205,15 +205,15 @@
       "methods": [
         {
           "name": "open",
-          "description": "open the window for the paypal button and start payment workflow (requires ids and amount to be set)",
+          "description": "update iframe url",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 76,
+              "line": 83,
               "column": 6
             },
             "end": {
-              "line": 90,
+              "line": 99,
               "column": 7
             }
           },
@@ -226,11 +226,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 92,
+              "line": 101,
               "column": 6
             },
             "end": {
-              "line": 95,
+              "line": 108,
               "column": 7
             }
           },
@@ -243,11 +243,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 97,
+              "line": 110,
               "column": 6
             },
             "end": {
-              "line": 100,
+              "line": 114,
               "column": 7
             }
           },
@@ -260,11 +260,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 103,
+              "line": 117,
               "column": 6
             },
             "end": {
-              "line": 122,
+              "line": 136,
               "column": 7
             }
           },
@@ -272,25 +272,21 @@
           "params": []
         },
         {
-          "name": "_openWindow",
+          "name": "_updateFrame",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 124,
+              "line": 138,
               "column": 6
             },
             "end": {
-              "line": 127,
+              "line": 144,
               "column": 7
             }
           },
           "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ]
+          "params": []
         },
         {
           "name": "_sendMessage",
@@ -298,11 +294,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 129,
+              "line": 146,
               "column": 6
             },
             "end": {
-              "line": 136,
+              "line": 153,
               "column": 7
             }
           },
@@ -322,11 +318,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 138,
+              "line": 155,
               "column": 6
             },
             "end": {
-              "line": 147,
+              "line": 164,
               "column": 7
             }
           },
@@ -343,11 +339,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 149,
+              "line": 166,
               "column": 6
             },
             "end": {
-              "line": 158,
+              "line": 175,
               "column": 7
             }
           },
@@ -364,11 +360,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 161,
+              "line": 178,
               "column": 6
             },
             "end": {
-              "line": 185,
+              "line": 205,
               "column": 7
             }
           },
@@ -385,11 +381,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 187,
+              "line": 207,
               "column": 6
             },
             "end": {
-              "line": 189,
+              "line": 209,
               "column": 7
             }
           },
@@ -406,7 +402,7 @@
           "column": 4
         },
         "end": {
-          "line": 190,
+          "line": 210,
           "column": 5
         }
       },
@@ -567,23 +563,7 @@
         "cssVariables": [],
         "selectors": []
       },
-      "slots": [
-        {
-          "description": "",
-          "name": "",
-          "range": {
-            "file": "paypal-button-express.html",
-            "start": {
-              "line": 10,
-              "column": 39
-            },
-            "end": {
-              "line": 10,
-              "column": 58
-            }
-          }
-        }
-      ],
+      "slots": [],
       "tagname": "paypal-button-express"
     },
     {
@@ -729,15 +709,15 @@
         {
           "name": "type",
           "type": "string",
-          "description": "see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/#specifying-button-type--cmd",
+          "description": "most common are `_xclick` as \"buy now\" and `_donations` (default)",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 84,
+              "line": 85,
               "column": 10
             },
             "end": {
-              "line": 87,
+              "line": 88,
               "column": 11
             }
           },
@@ -753,16 +733,57 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 89,
+              "line": 90,
               "column": 10
             },
             "end": {
-              "line": 91,
+              "line": 92,
               "column": 11
             }
           },
           "metadata": {
             "polymer": {}
+          }
+        },
+        {
+          "name": "sandbox",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 10
+            },
+            "end": {
+              "line": 97,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_url",
+          "type": "string",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 98,
+              "column": 10
+            },
+            "end": {
+              "line": 101,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
           }
         }
       ],
@@ -773,11 +794,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 95,
+              "line": 105,
               "column": 6
             },
             "end": {
-              "line": 98,
+              "line": 108,
               "column": 7
             }
           },
@@ -790,11 +811,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 100,
+              "line": 110,
               "column": 6
             },
             "end": {
-              "line": 103,
+              "line": 113,
               "column": 7
             }
           },
@@ -807,11 +828,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 105,
+              "line": 115,
               "column": 6
             },
             "end": {
-              "line": 108,
+              "line": 118,
               "column": 7
             }
           },
@@ -828,11 +849,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 110,
+              "line": 120,
               "column": 6
             },
             "end": {
-              "line": 112,
+              "line": 122,
               "column": 7
             }
           },
@@ -840,16 +861,37 @@
           "params": []
         },
         {
+          "name": "__url",
+          "description": "",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 124,
+              "column": 6
+            },
+            "end": {
+              "line": 130,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sandbox"
+            }
+          ]
+        },
+        {
           "name": "handleParams",
           "description": "detect from url params if the page is a redirect from the payment flow",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 115,
+              "line": 133,
               "column": 6
             },
             "end": {
-              "line": 138,
+              "line": 156,
               "column": 7
             }
           },
@@ -866,7 +908,7 @@
           "column": 4
         },
         "end": {
-          "line": 139,
+          "line": 157,
           "column": 5
         }
       },
@@ -988,14 +1030,14 @@
         },
         {
           "name": "type",
-          "description": "see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/#specifying-button-type--cmd",
+          "description": "most common are `_xclick` as \"buy now\" and `_donations` (default)",
           "sourceRange": {
             "start": {
-              "line": 84,
+              "line": 85,
               "column": 10
             },
             "end": {
-              "line": 87,
+              "line": 88,
               "column": 11
             }
           },
@@ -1007,16 +1049,32 @@
           "description": "the url to send ipn notifications",
           "sourceRange": {
             "start": {
-              "line": 89,
+              "line": 90,
               "column": 10
             },
             "end": {
-              "line": 91,
+              "line": 92,
               "column": 11
             }
           },
           "metadata": {},
           "type": "string"
+        },
+        {
+          "name": "sandbox",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 10
+            },
+            "end": {
+              "line": 97,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
         }
       ],
       "events": [
