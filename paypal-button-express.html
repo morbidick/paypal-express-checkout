@@ -8,7 +8,7 @@
       }
     </style>
 
-    <a href="#" on-click="_openWindow"><slot>Paypal</slot></a>
+    <iframe id="frame" width="100%" height="55px" frameBorder="0"></iframe>
 
     </template>
   </template>
@@ -62,21 +62,30 @@
             notify: true,
             readonly: true,
           },
-          // the opened window to render the button
-          _window: {
+          // the iframe to render the button
+          _frame: {
             type: Object,
           },
           // postMessage listener and handler
           _handler: {
             type: Object,
-          }
+          },
         };
       }
 
-      // open the window for the paypal button and start payment workflow (requires ids and amount to be set)
+      static get observers() {
+        return [
+          'open(sandbox, sandboxId, productionId)',
+          '_updateFrame(amount, currency, reference)',
+        ]
+      }
+
+      // update iframe url
       open() {
-        this._handler = this._eventHandler.bind(this);
-        window.addEventListener("message", this._handler);
+        // bail if frame isnt initialized yet
+        if (!this._frame) { return; }
+        // bail if no ids are set
+        if (!this.productionId && !(this.sandbox && this.sandboxId)) { return; }
 
         let params = new URLSearchParams();
         params.set('env', this._env());
@@ -87,17 +96,22 @@
         params.set('reference', this.reference);
         params.set('referer', document.location.href);
 
-        this._window = window.open(`${this.resolveUrl("paypal.html")}?${params.toString()}`);
+        this._frame.src = `${this.resolveUrl("paypal.html")}?${params.toString()}`;
       }
 
       connectedCallback() {
         super.connectedCallback();
         this.handleParams();
+        this._frame = this.$.frame;
+        this._handler = this._eventHandler.bind(this);
+        window.addEventListener("message", this._handler);
+        this.open();
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener("message", this._handler);
+        this._frame = null;
       }
 
       // detect from url params if the page is a redirect from the payment flow
@@ -122,17 +136,20 @@
         }
       }
 
-      _openWindow(event) {
-        event.preventDefault();
-        this.open();
+      _updateFrame() {
+        this._sendMessage('paypal-window-update', {
+          amount: this.amount,
+          currency: this.currency,
+          reference: this.reference,
+        });
       }
 
       _sendMessage(type, data) {
-        if (this._window) {
-          this._window.postMessage({
+        if (this._frame) {
+          this._frame.contentWindow.postMessage({
             type,
             data
-          }, "*");
+          }, `${window.location.protocol}//${window.location.host}`);
         }
       }
 
@@ -160,24 +177,27 @@
 
       // data bridge recieving
       _eventHandler(event) {
+        // bail for wrong origin
+        if (event.origin !== `${window.location.protocol}//${window.location.host}`) { return; }
+
         switch(event.data.type) {
+          case "paypal-window-init":
+            this._sendMessage("paypal-window-init-ack");
+            break;
           case "paypal-window-rendered":
+            this._updateFrame();
             break;
           case "paypal-window-success":
             this._sendMessage("paypal-window-success-ack");
-            window.removeEventListener("message", this._handler);
-
             this.response = event.data.data;
             this._fireSuccess(event.data.data);
             break;
           case "paypal-window-error":
             this._sendMessage("paypal-window-error-ack");
-            window.removeEventListener("message", this._handler);
             this._fireError(event.data.data);
             break;
           case "paypal-window-close":
             this._sendMessage("paypal-window-close-ack");
-            window.removeEventListener("message", this._handler);
             this._fireError("user closed window");
             break;
           default:

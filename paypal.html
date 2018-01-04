@@ -8,11 +8,11 @@
   var bridgeTimeoutHandler;
 
   function sendMessage(type, data) {
-    if (window.opener) {
-      window.opener.postMessage({
+    if (window.parent) {
+      window.parent.postMessage({
         type,
         data
-      }, "*");
+      }, `${window.location.protocol}//${window.location.host}`);
     }
   }
 
@@ -30,105 +30,111 @@
 
   // data bridge recieving
   window.addEventListener("message", (event) => {
+    // bail for wrong origin
+    if (event.origin !== `${window.location.protocol}//${window.location.host}`) { return; }
+
     switch (event.data.type) {
+      case "paypal-window-init-ack":
+        window.clearTimeout(bridgeTimeoutHandler);
+        render();
+        break;
       case "paypal-window-success-ack":
         window.clearTimeout(bridgeTimeoutHandler);
-        window.close();
         break;
-      case "paypal-window-close-ack":
-        window.close();
-        break;
-      case "paypal-window-error-ack":
-        window.close();
+      case "paypal-window-update":
+        let data = event.data.data;
+        searchParams.set('amount', data.amount);
+        searchParams.set('currency', data.currency);
+        searchParams.set('reference', data.reference);
         break;
       default:
         // do nothing
     }
   });
 
-  var button = paypal.Button.render({
+  function displayError(message) {
+    document.querySelector("#container").innerHTML = message;
+    throw new Error(message);
+  }
 
-    env: searchParams.get("env"),
+  function render() {
+    var button = paypal.Button.render({
 
-    // PayPal Client IDs - replace with your own
-    // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-    client: {
-      sandbox:    searchParams.get("sandboxId"),
-      production: searchParams.get("productionId"),
-    },
+      env: searchParams.get("env"),
 
-    // Show the buyer a 'Pay Now' button in the checkout flow
-    commit: true,
+      // PayPal Client IDs - replace with your own
+      // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+      client: {
+        sandbox:    searchParams.get("sandboxId"),
+        production: searchParams.get("productionId"),
+      },
 
-    onDisplay: function(data) {
-      sendMessage("paypal-window-rendered");
-    },
+      // Show the buyer a 'Pay Now' button in the checkout flow
+      commit: true,
 
-    // payment() is called when the button is clicked
-    payment: (data, actions) => {
-      // Make a call to the REST api to create the payment
-      return actions.payment.create({
-        payment: {
-          transactions: [
-            {
-              amount: { total: searchParams.get("amount"), currency: searchParams.get("currency") },
-              custom: searchParams.get("reference"),
+      onDisplay: function(data) {
+        sendMessage("paypal-window-rendered");
+      },
+
+      // payment() is called when the button is clicked
+      payment: (data, actions) => {
+        // Make a call to the REST api to create the payment
+        return actions.payment.create({
+          payment: {
+            transactions: [
+              {
+                amount: { total: searchParams.get("amount"), currency: searchParams.get("currency") },
+                custom: searchParams.get("reference"),
+              },
+            ],
+            redirect_urls: {
+              return_url: appendUrlParam(searchParams.get("referer"), "paypal-window-success"),
+              cancel_url: appendUrlParam(searchParams.get("referer"), "paypal-window-close"),
             },
-          ],
-          redirect_urls: {
-            return_url: appendUrlParam(searchParams.get("referer"), "paypal-window-success"),
-            cancel_url: appendUrlParam(searchParams.get("referer"), "paypal-window-close"),
           },
-        },
-      });
-    },
+        });
+      },
 
-    // onAuthorize() is called when the buyer approves the payment
-    onAuthorize: (data, actions) => {
-      // Make a call to the REST api to execute the payment
-      return actions.payment.execute().then( () => {
-        // detect dead bridge and redirect
-        bridgeTimeoutHandler = window.setTimeout(function() {
-          let paypalData = new URLSearchParams();
-          // mapping according to how paypal is handling the return_url
-          paypalData.set("paymentId", data.paymentID);
-          paypalData.set("token", data.paymentToken);
-          paypalData.set("PayerID", data.payerID);
+      // onAuthorize() is called when the buyer approves the payment
+      onAuthorize: (data, actions) => {
+        // Make a call to the REST api to execute the payment
+        return actions.payment.execute().then( () => {
+          bridgeTimeoutHandler = window.setTimeout(function() {
+            displayError("paypal postMessage bridge died");
+          }, 1000);
 
-          document.location = appendUrlParam(searchParams.get("referer"), `paypal-window-success&${paypalData.toString()}`);
-        }, 1000);
+          // send success via bridge
+          sendMessage("paypal-window-success", data);
+        });
+      },
 
-        // send success via bridge
-        sendMessage("paypal-window-success", data);
-      });
-    },
+      onCancel: (data, actions) => {
+        sendMessage("paypal-window-close");
+      },
 
-    onCancel: (data, actions) => {
-      sendMessage("paypal-window-close");
-    },
+      onError: (error) => {
+        sendMessage("paypal-window-error", error);
+      },
 
-    onError: (error) => {
-      sendMessage("paypal-window-error", error);
-    },
+    }, "#container");
+  }
 
-  }, "#container");
-
+  // send postMessage bridge text message to init
+  bridgeTimeoutHandler = window.setTimeout(function() {
+    displayError("paypal postMessage bridge couldnt be established");
+  }, 1000);
+  sendMessage("paypal-window-init");
   </script>
   <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .centered {
+      font-size: 0.8em;
+      color: red;
       text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="centered">
-    <h1>Paypal express checkout</h1>
     <div id="container"></div>
   </div>
 </body>
