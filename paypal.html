@@ -6,6 +6,7 @@
   <script>
   var searchParams = new URLSearchParams(window.location.search);
   var bridgeTimeoutHandler;
+  var initialised;
 
   function sendMessage(type, data) {
     if (window.parent) {
@@ -36,7 +37,10 @@
     switch (event.data.type) {
       case "paypal-window-init-ack":
         window.clearTimeout(bridgeTimeoutHandler);
-        render();
+        if (!initialised) {
+          initialised = true;
+          render();
+        }
         break;
       case "paypal-window-success-ack":
         window.clearTimeout(bridgeTimeoutHandler);
