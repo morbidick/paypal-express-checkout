@@ -10,6 +10,8 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../../show-json/show-json.html">
     <link rel="import" href="../paypal-button-express.html">
     <link rel="import" href="../paypal-button-form.html">
 
@@ -23,17 +25,17 @@
       <h3>Express button</h3>
       <demo-snippet>
         <template>
-          <paypal-button-express
-            sandbox
-            sandbox-id="AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R"
-            amount="33.00"
-            bubbles
-          ></paypal-button-express>
-          <script>
-            document.body.addEventListener("paypal-success", function(event) {
-              alert(JSON.stringify(event.detail));
-            });
-          </script>
+          <dom-bind>
+            <template is="dom-bind">
+              <paypal-button-express
+                sandbox
+                sandbox-id="AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R"
+                amount="12.34"
+                response="{{ response }}"
+              ></paypal-button-express>
+              <show-json hide-copy-button json="{{ response }}"></show-json>
+            </template>
+          </dom-bind>
         </template>
       </demo-snippet>
 

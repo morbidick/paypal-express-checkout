@@ -11,6 +11,7 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "show-json": "ryanburns23/show-json#^2.0.0",
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
