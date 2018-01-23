@@ -3,7 +3,7 @@
   "description": "Polymer 2 wrapper for the Paypal Express Checkout button",
   "author": "morbidick",
   "license": "MIT",
-  "main": "paypal-button.html",
+  "main": ["paypal-button-express.html", "paypal-button-form.html"],
   "dependencies": {
     "bower": "^1.8.0",
     "polymer-cli": "^1.0.0"

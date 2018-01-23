@@ -1,6 +1,6 @@
 {
   "name": "paypal-express-checkout",
-  "main": "paypal-button.html",
+  "main": ["paypal-button-express.html", "paypal-button-form.html"],
   "license": "MIT",
   "demos": {
     "Demo": "demo/index.html"
