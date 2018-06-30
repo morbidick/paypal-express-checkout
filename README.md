@@ -1,6 +1,6 @@
 # Polymer 2 wrapper for the Paypal Express Checkout button
 
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/morbidick/paypal-express-checkout)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/morbidick/paypal-express-checkout) [![Greenkeeper badge](https://badges.greenkeeper.io/morbidick/paypal-express-checkout.svg)](https://greenkeeper.io/)
 
 ![Button flow demo](demo/flow.gif)
 
